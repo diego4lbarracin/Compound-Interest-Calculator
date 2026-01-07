@@ -12,7 +12,7 @@ func main(){
 
 	router.GET("/", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{
-            "message": "SALOMON, Welcome to Compound Interest Calculator API ESTE MENSAJE VIAJO DESDE YOPAL HASTA NORTH VIRGINIA Y LUEGO A BOGOTA",
+            "message": "Dude, you actually overcomplicated things, just use render instead, Welcome to Compound Interest Calculator API ESTE MENSAJE VIAJO DESDE YOPAL HASTA NORTH VIRGINIA Y LUEGO A BOGOTA",
             "endpoints": gin.H{
                 "calculation": "/calculation",
             },
