@@ -11,5 +11,5 @@ func main(){
 
 	router.GET("/calculation", handlers.GetCalculation)
 
-	router.Run(":8080")
+	router.Run(":3536")
 }
