@@ -1,0 +1,11 @@
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+.git
+.gitignore
+README.md
+.env
+.vscode
