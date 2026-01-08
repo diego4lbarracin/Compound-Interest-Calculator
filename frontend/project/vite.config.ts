@@ -8,4 +8,14 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["lucide-react"],
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    // Ensure proper asset paths
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
 });
