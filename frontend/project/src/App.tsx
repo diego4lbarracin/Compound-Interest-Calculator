@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import CalculatorForm from './components/CalculatorForm';
-import CompoundChart from './components/CompoundChart';
-import ETFSection from './components/ETFSection';
+import { useState, useEffect } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import CalculatorForm from "./components/CalculatorForm";
+import CompoundChart from "./components/CompoundChart";
+import ETFSection from "./components/ETFSection";
 
 interface YearData {
   year: number;
@@ -22,19 +22,21 @@ interface FormData {
 
 function App() {
   const [isDark, setIsDark] = useState(false);
-  const [calculationData, setCalculationData] = useState<YearData[] | null>(null);
+  const [calculationData, setCalculationData] = useState<YearData[] | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [interestRate, setInterestRate] = useState<number>(0);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
       setIsDark(true);
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
 
   const toggleTheme = () => {
@@ -45,46 +47,61 @@ function App() {
     setIsLoading(true);
 
     try {
-      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calculate-compound-interest`;
+      // Use your Go API endpoint
+      const apiUrl =
+        import.meta.env.VITE_GO_API_URL ||
+        "http://back-end-compound-interest-calculator.onrender.com";
 
-      const response = await fetch(apiUrl, {
-        method: 'POST',
+      const params = new URLSearchParams({
+        initial_investment: formData.initialInvestment,
+        monthly_contribution: formData.monthlyContribution,
+        saving_years: formData.lengthYears,
+        interest_rate: formData.interestRate,
+        compound_frequency: formData.compoundFrequency.toLowerCase(),
+      });
+
+      const response = await fetch(`${apiUrl}/calculation?${params}`, {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          initialInvestment: parseFloat(formData.initialInvestment),
-          monthlyContribution: parseFloat(formData.monthlyContribution),
-          lengthYears: parseInt(formData.lengthYears),
-          interestRate: parseFloat(formData.interestRate),
-          compoundFrequency: formData.compoundFrequency,
-        }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to calculate');
+        throw new Error("Failed to calculate");
       }
 
       const data: YearData[] = await response.json();
       setCalculationData(data);
       setInterestRate(parseFloat(formData.interestRate));
     } catch (error) {
-      console.error('Error calculating compound interest:', error);
-      alert('Failed to calculate. Please try again.');
+      console.error("Error calculating compound interest:", error);
+      alert("Failed to calculate. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-200`}>
+    <div
+      className={`min-h-screen ${
+        isDark ? "bg-gray-900" : "bg-gray-50"
+      } transition-colors duration-200`}
+    >
       <Header isDark={isDark} toggleTheme={toggleTheme} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className={`p-6 md:p-8 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-2xl`}>
-            <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <div
+            className={`p-6 md:p-8 rounded-2xl ${
+              isDark ? "bg-gray-800" : "bg-white"
+            } shadow-2xl`}
+          >
+            <h2
+              className={`text-2xl font-bold mb-6 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}
+            >
               Investment Parameters
             </h2>
             <CalculatorForm

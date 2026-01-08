@@ -1,0 +1,40 @@
+# Frontend
+frontend/project/node_modules
+frontend/project/dist
+frontend/project/dist-ssr
+frontend/project/*.local
+frontend/project/.env
+frontend/project/.bolt
+
+# Backend
+backend/Go_API/*.exe
+backend/Go_API/*.dll
+backend/Go_API/*.so
+backend/Go_API/*.dylib
+backend/Go_API/*.test
+backend/Go_API/*.out
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+Thumbs.db
+.Spotlight-V100
+.Trashes
