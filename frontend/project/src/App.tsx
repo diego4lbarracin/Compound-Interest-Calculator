@@ -50,7 +50,7 @@ function App() {
       // Use your Go API endpoint
       const apiUrl =
         import.meta.env.VITE_GO_API_URL ||
-        "http://back-end-compound-interest-calculator.onrender.com";
+        "https://back-end-compound-interest-calculator.onrender.com";
 
       const params = new URLSearchParams({
         initial_investment: formData.initialInvestment,
