@@ -47,10 +47,16 @@ function App() {
     setIsLoading(true);
 
     try {
-      // Use your Go API endpoint
-      const apiUrl =
-        import.meta.env.VITE_GO_API_URL ||
-        "https://back-end-compound-interest-calculator.onrender.com";
+      // API URL is injected from GitHub Secrets during build
+      const apiUrl = import.meta.env.VITE_CMPI_BACK_GO_API;
+
+      if (!apiUrl) {
+        throw new Error(
+          "API URL is not configured. Please check environment variables."
+        );
+      }
+
+      console.log("Using API URL:", apiUrl); // Debug log
 
       const params = new URLSearchParams({
         initial_investment: formData.initialInvestment,
@@ -68,7 +74,10 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to calculate");
+        const errorText = await response.text();
+        throw new Error(
+          `Failed to calculate: ${response.status} - ${errorText}`
+        );
       }
 
       const data: YearData[] = await response.json();
@@ -76,7 +85,11 @@ function App() {
       setInterestRate(parseFloat(formData.interestRate));
     } catch (error) {
       console.error("Error calculating compound interest:", error);
-      alert("Failed to calculate. Please try again.");
+      alert(
+        `Failed to calculate. Please try again. Error: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setIsLoading(false);
     }

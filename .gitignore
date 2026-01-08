@@ -5,7 +5,9 @@ frontend/project/dist-ssr
 frontend/project/*.local
 frontend/project/.env
 frontend/project/.bolt
-
+# Environment variables
+frontend/project/.env
+frontend/project/.env.local
 # Backend
 backend/Go_API/*.exe
 backend/Go_API/*.dll
