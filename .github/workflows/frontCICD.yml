@@ -38,7 +38,6 @@ jobs:
           path: frontend/project/dist
           retention-days: 7
 
-  # Optional: Deploy to GitHub Pages
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -48,6 +47,10 @@ jobs:
       contents: read
       pages: write
       id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Download build artifacts
@@ -62,7 +65,7 @@ jobs:
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/project/dist
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
