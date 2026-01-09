@@ -40,7 +40,7 @@ npm install
 npm run dev
 ```
 
-Endpoints
+##Endpoints
 
 ### 1. Compound Interest Calculation
 
