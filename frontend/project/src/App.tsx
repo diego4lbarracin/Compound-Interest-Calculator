@@ -20,6 +20,19 @@ interface FormData {
   compoundFrequency: string;
 }
 
+interface ETF {
+  etf_symbol: string;
+  etf_name: string;
+  etf_avg_return: number;
+  etf_description: string;
+}
+
+interface ETFResponse {
+  success: boolean;
+  data: ETF[];
+  count: number;
+}
+
 function App() {
   const [isDark, setIsDark] = useState(false);
   const [calculationData, setCalculationData] = useState<YearData[] | null>(
@@ -27,6 +40,7 @@ function App() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [interestRate, setInterestRate] = useState<number>(0);
+  const [etfData, setEtfData] = useState<ETF[]>([]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -83,6 +97,32 @@ function App() {
       const data: YearData[] = await response.json();
       setCalculationData(data);
       setInterestRate(parseFloat(formData.interestRate));
+
+      // Fetch ETF recommendations
+      try {
+        const etfResponse = await fetch(
+          `${apiUrl}/etf_information?interest_rate=${formData.interestRate}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (etfResponse.ok) {
+          const etfResult: ETFResponse = await etfResponse.json();
+          if (etfResult.success && etfResult.data) {
+            setEtfData(etfResult.data);
+          }
+        } else {
+          console.warn("Failed to fetch ETF recommendations");
+          setEtfData([]);
+        }
+      } catch (etfError) {
+        console.warn("Error fetching ETF recommendations:", etfError);
+        setEtfData([]);
+      }
     } catch (error) {
       console.error("Error calculating compound interest:", error);
       alert(
@@ -129,8 +169,12 @@ function App() {
           </div>
         </div>
 
-        {calculationData && (
-          <ETFSection interestRate={interestRate} isDark={isDark} />
+        {calculationData && etfData.length > 0 && (
+          <ETFSection
+            interestRate={interestRate}
+            isDark={isDark}
+            etfs={etfData}
+          />
         )}
       </main>
 
