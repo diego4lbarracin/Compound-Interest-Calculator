@@ -15,7 +15,8 @@ backend/Go_API/*.so
 backend/Go_API/*.dylib
 backend/Go_API/*.test
 backend/Go_API/*.out
-
+backend/Go_API/.env
+backend/Go_API/*.env
 # IDE
 .vscode/*
 !.vscode/extensions.json
