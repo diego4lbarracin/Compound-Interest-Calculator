@@ -55,30 +55,9 @@ func main() {
     router.GET("/health", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{"status": "healthy"})
     })
-
-    // Test the ETF service with a random interest rate on startup
-    fmt.Println("\n=== Testing ETF Information Service ===")
-    testInterestRate := 8.5
-    fmt.Printf("Fetching ETF recommendations for %.2f%% interest rate...\n\n", testInterestRate)
-
-    // Uncomment to test on startup
-    /*
-    etfService := services.NewETFInformationService()
-    etfs, err := etfService.GetETFInformation(testInterestRate)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-    } else {
-        fmt.Printf("Successfully retrieved %d ETFs:\n", len(etfs))
-        for i, etf := range etfs {
-            fmt.Printf("\n%d. %s (%s)\n", i+1, etf.EtfName, etf.EtfSymbol)
-            fmt.Printf("   Average Return: %.2f%%\n", etf.EtfAvgReturn)
-            fmt.Printf("   Description: %s\n", etf.EtfDescription)
-        }
-    }
-    */
     
     fmt.Println("\n=== Server Starting ===")
-    fmt.Println("Server running on http://localhost:3536")
+
 
     router.Run(":3536")
 }
