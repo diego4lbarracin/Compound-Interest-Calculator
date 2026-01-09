@@ -2,36 +2,62 @@ package main
 
 import (
 	"example/Go_API/handlers"
+	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-func main(){
-	router := gin.Default()
+func main() {
+    // Load .env file
+    if err := godotenv.Load(); err != nil {
+        log.Println("Warning: .env file not found, using system environment variables")
+    }
 
-	// Configure CORS
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Allows all origins - restrict in production
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
+    router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
+    // Configure CORS
+    router.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"*"},
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: false,
+        MaxAge:           12 * time.Hour,
+    }))
+
+    // Initialize handlers
+    etfInsightsHandler := handlers.NewETFInsightsHandler()
+
+    // Root endpoint
+    router.GET("/", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{
-            "message": "Dude, you actually overcomplicated things, just use render instead, Welcome to Compound Interest Calculator API ESTE MENSAJE VIAJO DESDE YOPAL HASTA NORTH VIRGINIA Y LUEGO A BOGOTA",
+            "message": "Welcome to Compound Interest Calculator API",
             "endpoints": gin.H{
-                "calculation": "/calculation",
+                "calculation":     "/calculation?initial_investment=1000&monthly_contribution=100&saving_years=10&interest_rate=8&compound_frequency=monthly",
+                "etf_information": "/etf_information?interest_rate=8.5",
+                "health":          "/health",
             },
         })
     })
-	
-	router.GET("/calculation", handlers.GetCalculation)
 
-	router.Run(":3536")
+    // Existing calculation endpoint
+    router.GET("/calculation", handlers.GetCalculation)
+
+    // New ETF information endpoint
+    router.GET("/etf_information", etfInsightsHandler.GetETFInformation)
+
+    // Health check
+    router.GET("/health", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{"status": "healthy"})
+    })
+    
+    fmt.Println("\n=== Server Starting ===")
+
+
+    router.Run(":3536")
 }
