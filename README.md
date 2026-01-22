@@ -248,13 +248,3 @@ Client Request → Handler (HTTP) → Service (Business Logic) → External API/
 6. Service parses JSON response
 7. Handler wraps data in response format
 8. Client receives personalized ETF recommendations
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-## MIT License - feel free to use this project for learning and development
-
-Developed with ❤️ by diego4lbarracin
