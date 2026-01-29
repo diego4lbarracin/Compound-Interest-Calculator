@@ -1,44 +1,20 @@
 # Compound-Interest-Calculator
 
-A full-stack compound interest calculator built with **Go** (backend) and **React + TypeScript** (frontend).
+![Project Screenshot](https://raw.githubusercontent.com/diego4lbarracin/Diego_Personal_Website/refs/heads/main/public/images/projects/Compund_Interest_Calculator.jpg)
 
-## Architecture
+This is a Compound Interest Calculator that allows users to simulate how compound interest could help them increase their savings and obtain investing insights for replicating the values obtained in the calculation using ETFs whose average return has been close to the one selected by the user for the simulation in the last 5 years. The application is accessible through the internet and follows an API REST architecture, where the frontend sends a HTTP request with the parameters for the calculation to the backend, which handles the request by executing a method that receives the parameters and returns an array with the calculation for each year and, while doing that, makes a call to the OpenAI API and obtains information about 10 ETFS that have had an average return similar to the one obtained by parameter from the HTTP request, includes the ETF symbol, ETF Provider (iShares, Vanguard, etc.) and a brief description of the ETF, then organizes the response in an JSON file and sends it back to the frontend where finally, both the calculation and the investment insights are displayed to the user.
 
-- **Backend**: Go API deployed on Render
-  - Compound Interest Calculation: `/calculation`
-  - AI-Powered ETF Recommendations: `/etf_information`
-  - Base URL: `https://back-end-compound-interest-calculator.onrender.com`
-  - Integrates with OpenAI GPT-4o-mini for intelligent ETF analysis
-- **Frontend**: React + TypeScript + Vite + Tailwind CSS
-  - Interactive calculator UI with dark mode
-  - Real-time chart visualization with dual-line display (Recharts)
-  - ETF recommendations based on target returns
+---
 
 ## Features
 
-✨ Calculate compound interest with different compounding frequencies  
-📊 Interactive line chart showing principal vs. total amount growth  
-💡 AI-powered ETF recommendations using OpenAI GPT-4o-mini  
-🤖 Real-time market analysis for personalized investment suggestions  
-🌓 Dark/Light theme toggle  
-📱 Fully responsive design
+- Available for mobile and desktop.
+- Calculate compound interest with different compounding frequencies (Daily, Monthly, Annually, Semiannually).
+- Interactive line chart where the principal vs. total amount growth is displayed.
+- 10 ETF recommendations for US stock markets using OpenAI API (GPT-4o-mini) whose performance in the previous 5 years is close to the interest rate typed by the user.
+- Dark/Light theme.
 
-## Getting Started
-
-### Backend (Go API)
-
-```bash
-cd backend/Go_API
-go run main.go
-```
-
-### Frontend
-
-```bash
-cd frontend/project
-npm install
-npm run dev
-```
+---
 
 ## Endpoints
 
@@ -76,14 +52,15 @@ GET /calculation?initial_investment=860000&monthly_contribution=2400&saving_year
     "interest_earned": 44668.485358168604,
     "total_amount": 933468.4853581686
   }
+  //Until the year obtained from the GET request.
 ]
 ```
 
-### 2. AI-Powered ETF Recommendations (NEW! 🚀)
+### 2. ETF Recommendations using AI
 
 **Endpoint:** `GET /etf_information`
 
-**Description:** Leverages OpenAI's GPT-4o-mini to analyze US markets and provide personalized ETF recommendations based on your target interest rate.
+**Description:** The API executes an API call to the OpenAI's API, and using the model GPT-4o-mini, analyze US stock markets and returns a JSON file with personalized ETF recommendations based on the user's target interest rate from the simulation.
 
 **Query Parameters:**
 
@@ -119,14 +96,6 @@ GET /etf_information?interest_rate=8.5
 }
 ```
 
-**Features:**
-
-- 🤖 AI-powered analysis using OpenAI GPT-4o-mini
-- 📊 Returns up to 10 ETF recommendations
-- 🎯 Matches ETFs with historical returns close to your target rate
-- 📈 Includes ticker symbol, name, average return, and detailed description
-- ⚡ Fast response time with intelligent caching
-
 **Error Response:**
 
 ```json
@@ -136,7 +105,7 @@ GET /etf_information?interest_rate=8.5
 }
 ```
 
-**Try it:**
+**Test it :D :**
 
 ```bash
 # Production
@@ -146,59 +115,45 @@ curl "https://back-end-compound-interest-calculator.onrender.com/etf_information
 curl "http://localhost:3536/etf_information?interest_rate=8.5"
 ```
 
-## Tech Stack
+---
+
+## Technologies Used
 
 **Backend**:
 
-- Go 1.21+
-- Gin Framework (HTTP router)
-- OpenAI Go SDK (AI-powered recommendations)
-- CORS middleware
+- Go 1.25.
+- Gin Framework (HTTP router).
+- OpenAI Go SDK (AI-powered recommendations).
+- CORS middleware.
+- Docker.
 
 **Frontend**:
 
-- React 18
+- React
 - TypeScript
 - Vite (build tool)
 - Tailwind CSS (styling)
-- Recharts (data visualization)
-- Lucide React (icons)
 
 **AI/ML**:
 
 - OpenAI GPT-4o-mini (ETF analysis and recommendations)
 
-**Deployment**:
+---
+
+## Deployment
+
+The **backend** is currently containerized and running on Render, where the repository is linked and the folder `/backend/GO_API` is set a root folder and, after a successful pull request to the main branch, follows the instructions in the Dockerfile, builds and run the container.
+
+The **frontend** is deployed on GitHub pages using a CI/CD pipeline using GitHub Actions and workflows. Each workflow is executed after a successful pull request to the main branch.
 
 - Backend: Render
 - Frontend: GitHub Pages
 
-## Environment Variables
+**Fun fact:** The backend was deployed at first on the AWS cloud, with the respective CI/CD pipeline created using a workflow executed by GitHub actions, which was configured to use the EC2 instance on AWS as runner. I decided to switch to Render to reduce hosting costs for the project, but it was a great educational experience though.
 
-### Backend (Required for ETF Recommendations)
+---
 
-Create a `.env` file in `backend/Go_API/`:
-
-```env
-OPENAI_API_KEY=your-openai-api-key-here
-USE_MOCK_ETF_DATA=false  # Set to true for development without OpenAI credits
-```
-
-**For Production (Render):**
-Set environment variables in Render Dashboard:
-
-- `OPENAI_API_KEY` - Your OpenAI API key
-- `GIN_MODE` - `release`
-
-### Frontend (Optional)
-
-Create a `.env` file in `frontend/project/`:
-
-```env
-VITE_CMPI_BACK_GO_API=https://back-end-compound-interest-calculator.onrender.com
-```
-
-## Project Structure
+## (Current) Project Structure
 
 ```
 Compound-Interest-Calculator/
@@ -228,33 +183,16 @@ Compound-Interest-Calculator/
 │       │   └── main.tsx
 │       └── public/             # Static assets
 └── .github/
-    └── workflows/              # CI/CD pipelines
+    └── workflows/              # CI/CD pipeline
         └── frontCICD.yml
 ```
 
 ## API Architecture
 
 ```
-Client Request → Handler (HTTP) → Service (Business Logic) → External API/Database → Response
+[Client Request] (Frontend) ⇄ [Handler (HTTP) ⇄ Service (Business Logic and API Calls to External Service)] (Backend) ⇄ External OpenAI's API
 ```
 
-**Example Flow - ETF Recommendations:**
+---
 
-1. Client sends GET request to `/etf_information?interest_rate=8.5`
-2. `ETFInsightsHandler` validates the interest_rate parameter
-3. `ETFInformationService` builds an AI prompt
-4. Service calls OpenAI GPT-4o-mini API
-5. AI analyzes market data and generates ETF recommendations
-6. Service parses JSON response
-7. Handler wraps data in response format
-8. Client receives personalized ETF recommendations
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-## MIT License - feel free to use this project for learning and development
-
-Developed with ❤️ by diego4lbarracin
+Developed by diego4lbarracin
