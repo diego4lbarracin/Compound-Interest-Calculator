@@ -1,6 +1,6 @@
 # Compound-Interest-Calculator
 
-[Click Here to Test the Live Application :)][(https://diego4lbarracin.github.io/The_Minecraft_Server_Generator/](https://diego4lbarracin.github.io/Compound-Interest-Calculator/))
+[Click Here to Test the Live Application :)](https://diego4lbarracin.github.io/Compound-Interest-Calculator/)
 
 ![Project Screenshot](https://raw.githubusercontent.com/diego4lbarracin/Diego_Personal_Website/refs/heads/main/public/images/projects/Compund_Interest_Calculator.jpg)
 
